@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.fgsveto.a500pxphotospilot.network.PhotosApi
+import com.fgsveto.a500pxphotospilot.network.PhotosApiResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,14 +24,18 @@ class GalleryViewModel: ViewModel() {
         getPhotos()
     }
 
-    private fun getPhotos() {
-        PhotosApi.retrofitService.getPhotos().enqueue( object: Callback<String> {
-            override fun onFailure(call: Call<String>, t: Throwable) {
+    private fun getPhotos(page: Int = 1) {
+        PhotosApi.retrofitService.getPhotos(page = page).enqueue( object: Callback<PhotosApiResponse> {
+            override fun onFailure(call: Call<PhotosApiResponse>, t: Throwable) {
                 _response.value = "Failure: " + t.message
             }
 
-            override fun onResponse(call: Call<String>, response: Response<String>) {
-                _response.value = response.body()
+            override fun onResponse(call: Call<PhotosApiResponse>,
+                                    photosApiResponse: Response<PhotosApiResponse>) {
+                _response.value = "Success: page ${photosApiResponse.body()?.currentPage}" +
+                        "\n${photosApiResponse.body()?.totalPages} total pages" +
+                        "\n${photosApiResponse.body()?.totalItems} total items" +
+                        "\n${photosApiResponse.body()?.photos?.size} photos retrieved"
             }
         })
     }
