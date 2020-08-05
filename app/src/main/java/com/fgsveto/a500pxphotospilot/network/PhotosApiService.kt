@@ -1,7 +1,9 @@
 package com.fgsveto.a500pxphotospilot.network
 
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.squareup.moshi.Moshi
+import kotlinx.coroutines.Deferred
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -18,6 +20,7 @@ private val moshi = Moshi.Builder()
 
 private val retrofit = Retrofit.Builder()
     .addConverterFactory(MoshiConverterFactory.create(moshi))
+    .addCallAdapterFactory(CoroutineCallAdapterFactory())
     .baseUrl(BASE_URL)
     .build()
 
@@ -26,7 +29,7 @@ interface PhotosApiService {
     fun getPhotos(
         @HeaderMap headers: Map<String, String> = getHeaderMap(),
         @Query("page") page: Int = 1
-    ): Call<PhotosApiResponse>
+    ): Deferred<PhotosApiResponse>
 }
 
 private fun getHeaderMap(): Map<String, String> {
