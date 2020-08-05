@@ -12,7 +12,7 @@ import retrofit2.http.HeaderMap
 import retrofit2.http.Query
 
 private const val BASE_URL = "https://api.500px.com/"
-private const val CONSUMER_KEY = "P7LLhKkPAnPUpbfAXk3Jq2iDjYmCx87zgfEDxQVS"
+private const val CONSUMER_KEY = "<insert_your_consumer_key>"
 
 private val moshi = Moshi.Builder()
     .add(KotlinJsonAdapterFactory())
