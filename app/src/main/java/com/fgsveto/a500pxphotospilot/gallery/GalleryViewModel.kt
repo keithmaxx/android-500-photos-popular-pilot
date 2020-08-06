@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.fgsveto.a500pxphotospilot.network.Photo
 import com.fgsveto.a500pxphotospilot.network.PhotosApi
+import com.fgsveto.a500pxphotospilot.network.PhotosApiFeature
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -34,13 +35,13 @@ class GalleryViewModel: ViewModel() {
         get() = _navigateToSelectedPhoto
 
     init {
-        getPhotos()
+        getPhotos(feature = PhotosApiFeature.POPULAR, page = 1)
     }
 
-    private fun getPhotos(page: Int = 1) {
+    private fun getPhotos(feature: PhotosApiFeature = PhotosApiFeature.POPULAR, page: Int = 1) {
         coroutineScope.launch {
             // Get the Retrofit request Deferred object...
-            var getPropertiesDeferred = PhotosApi.retrofitService.getPhotos(page = page)
+            var getPropertiesDeferred = PhotosApi.retrofitService.getPhotos(feature = feature.value, page = page)
             try {
                 _status.value = PhotosApiStatus.LOADING
                 // ... for which we would Await the result.
@@ -53,6 +54,10 @@ class GalleryViewModel: ViewModel() {
                 _status.value = PhotosApiStatus.ERROR
             }
         }
+    }
+
+    fun updateFeature(feature: PhotosApiFeature) {
+        getPhotos(feature)
     }
 
     override fun onCleared() {

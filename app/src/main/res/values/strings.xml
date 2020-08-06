@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">500px Photos Pilot</string>
+    <string name="show_popular">Show Popular</string>
+    <string name="show_upcoming">Show Upcoming</string>
+    <string name="show_editors_choice">Show Editors\' Choice</string>
 </resources>

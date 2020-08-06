@@ -13,6 +13,7 @@ import retrofit2.http.Query
 
 private const val BASE_URL = "https://api.500px.com/"
 private const val CONSUMER_KEY = "<insert_your_consumer_key>"
+enum class PhotosApiFeature(val value: String) { POPULAR("popular"), UPCOMING("upcoming"), EDITORS_CHOICE("editors") }
 
 private val moshi = Moshi.Builder()
     .add(KotlinJsonAdapterFactory())
@@ -28,13 +29,13 @@ interface PhotosApiService {
     @GET("v1/photos")
     fun getPhotos(
         @HeaderMap headers: Map<String, String> = getHeaderMap(),
+        @Query("feature") feature: String = "popular",
         @Query("page") page: Int = 1
     ): Deferred<PhotosApiResponse>
 }
 
 private fun getHeaderMap(): Map<String, String> {
     val headerMap = mutableMapOf<String, String>()
-    headerMap["feature"] = "popular"
     headerMap["consumer_key"] = CONSUMER_KEY
     return headerMap
 }
