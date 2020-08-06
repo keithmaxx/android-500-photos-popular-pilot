@@ -34,8 +34,11 @@ class GalleryViewModel: ViewModel() {
     val navigateToSelectedPhoto: LiveData<Photo>
         get() = _navigateToSelectedPhoto
 
+    private var currentPage = 1
+    private var currentFeature = PhotosApiFeature.POPULAR
+
     init {
-        getPhotos(feature = PhotosApiFeature.POPULAR, page = 1)
+        getPhotos(feature = currentFeature, page = currentPage)
     }
 
     private fun getPhotos(feature: PhotosApiFeature = PhotosApiFeature.POPULAR, page: Int = 1) {
@@ -46,18 +49,35 @@ class GalleryViewModel: ViewModel() {
                 _status.value = PhotosApiStatus.LOADING
                 // ... for which we would Await the result.
                 var photosApiResponse = getPropertiesDeferred.await()
-                _status.value = PhotosApiStatus.COMPLETED
+
                 if (photosApiResponse.photos.isNotEmpty()) {
-                    _photos.value = photosApiResponse.photos
+                    if (feature != currentFeature || _photos.value.isNullOrEmpty()) {
+                        _photos.value = photosApiResponse.photos
+                    } else {
+                        val existingPhotos = _photos.value!!.toMutableList()
+                        existingPhotos.addAll(photosApiResponse.photos)
+                        _photos.value = existingPhotos.toList()
+                    }
                 }
+                _status.value = PhotosApiStatus.COMPLETED
+                currentPage = page
+                currentFeature = feature
             } catch (e: Exception) {
                 _status.value = PhotosApiStatus.ERROR
             }
         }
     }
 
-    fun updateFeature(feature: PhotosApiFeature) {
-        getPhotos(feature)
+    fun getNextPage() {
+        getPhotos(page = ++currentPage)
+    }
+
+    fun isLoading(): Boolean {
+        return _status == PhotosApiStatus.LOADING
+    }
+
+    fun showFeature(feature: PhotosApiFeature) {
+        getPhotos(feature = feature)
     }
 
     override fun onCleared() {
