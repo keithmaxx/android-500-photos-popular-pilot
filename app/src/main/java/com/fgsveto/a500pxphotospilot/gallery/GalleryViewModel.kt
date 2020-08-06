@@ -35,7 +35,7 @@ class GalleryViewModel: ViewModel() {
         get() = _navigateToSelectedPhoto
 
     private var currentPage = 1
-    private var currentFeature = PhotosApiFeature.POPULAR
+    var currentFeature = PhotosApiFeature.POPULAR
 
     init {
         getPhotos(feature = currentFeature, page = currentPage)
@@ -77,7 +77,8 @@ class GalleryViewModel: ViewModel() {
     }
 
     fun showFeature(feature: PhotosApiFeature) {
-        getPhotos(feature = feature)
+        if (feature != currentFeature)
+            getPhotos(feature = feature)
     }
 
     override fun onCleared() {

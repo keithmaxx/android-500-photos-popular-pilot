@@ -71,6 +71,19 @@ class GalleryFragment : Fragment() {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        menu.findItem(R.id.show_popular).isVisible = true
+        menu.findItem(R.id.show_upcoming).isVisible = true
+        menu.findItem(R.id.show_editors_choice).isVisible = true
+        // Hide only the current feature
+        when (viewModel.currentFeature) {
+            PhotosApiFeature.UPCOMING -> menu.findItem(R.id.show_upcoming).isVisible = false
+            PhotosApiFeature.EDITORS_CHOICE -> menu.findItem(R.id.show_editors_choice).isVisible = false
+            else -> menu.findItem(R.id.show_popular).isVisible = false
+        }
+        super.onPrepareOptionsMenu(menu)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         viewModel.showFeature(
             when (item.itemId) {
