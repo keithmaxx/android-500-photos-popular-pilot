@@ -8,7 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.fgsveto.a500pxphotospilot.databinding.GridViewItemBinding
 
 
-class PhotoGridAdapter : ListAdapter<Photo, PhotoGridAdapter.PhotoViewHolder>(DiffCallback) {
+class PhotoGridAdapter(val onClickListener: OnClickListener) :
+    ListAdapter<Photo, PhotoGridAdapter.PhotoViewHolder>(DiffCallback) {
 
     /**
      * This takes the binding variable from the associate GridViewItem,
@@ -39,7 +40,17 @@ class PhotoGridAdapter : ListAdapter<Photo, PhotoGridAdapter.PhotoViewHolder>(Di
     }
 
     override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
-        val marsProperty = getItem(position)
-        holder.bind(marsProperty)
+        val photo = getItem(position)
+        holder.itemView.setOnClickListener {
+            onClickListener.onClick(photo)
+        }
+        holder.bind(photo)
+    }
+
+    /**
+     * Handles clicks on [RecyclerView] items.
+     */
+    class OnClickListener(val clickListener: (photo: Photo) -> Unit) {
+        fun onClick(photo: Photo) = clickListener(photo)
     }
 }

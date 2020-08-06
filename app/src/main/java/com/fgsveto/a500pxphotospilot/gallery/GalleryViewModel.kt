@@ -28,6 +28,11 @@ class GalleryViewModel: ViewModel() {
     val photos: LiveData<List<Photo>>
         get() = _photos
 
+    // For navigating to view the details of a selected photo
+    private val _navigateToSelectedPhoto = MutableLiveData<Photo>()
+    val navigateToSelectedPhoto: LiveData<Photo>
+        get() = _navigateToSelectedPhoto
+
     init {
         getPhotos()
     }
@@ -53,6 +58,14 @@ class GalleryViewModel: ViewModel() {
     override fun onCleared() {
         super.onCleared()
         viewModelJob.cancel()
+    }
+
+    fun displayPhotoDetails(photo: Photo) {
+        _navigateToSelectedPhoto.value = photo
+    }
+
+    fun displayPhotoDetailsCompleted() {
+        _navigateToSelectedPhoto.value = null
     }
 }
 

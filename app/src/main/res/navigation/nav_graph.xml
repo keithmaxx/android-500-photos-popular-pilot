@@ -10,5 +10,18 @@
             android:name="com.fgsveto.a500pxphotospilot.gallery.GalleryFragment"
             android:label="fragment_overview"
             tools:layout="@layout/fragment_gallery" >
+            <action
+                android:id="@+id/action_showDetail"
+                app:destination="@id/detailFragment" />
+        </fragment>
+
+        <fragment
+            android:id="@+id/detailFragment"
+            android:name="com.fgsveto.a500pxphotospilot.detail.DetailFragment"
+            android:label="fragment_detail"
+            tools:layout="@layout/fragment_detail" >
+            <argument
+                android:name="selectedPhoto"
+                app:argType="com.fgsveto.a500pxphotospilot.network.Photo" />
         </fragment>
 </navigation>

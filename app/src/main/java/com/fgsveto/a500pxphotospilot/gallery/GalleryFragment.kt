@@ -3,7 +3,9 @@ package com.fgsveto.a500pxphotospilot.gallery
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.fgsveto.a500pxphotospilot.databinding.FragmentGalleryBinding
 import com.fgsveto.a500pxphotospilot.network.PhotoGridAdapter
 
@@ -23,14 +25,20 @@ class GalleryFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         val binding = FragmentGalleryBinding.inflate(inflater)
 
-        // Allows Data Binding to Observe LiveData with the lifecycle of this Fragment
         binding.lifecycleOwner = this
 
-        // Giving the binding access to the OverviewViewModel
         binding.viewModel = viewModel
 
-        // Sets the adapter of the photosGrid RecyclerView
-        binding.photosGrid.adapter = PhotoGridAdapter()
+        binding.photosGrid.adapter = PhotoGridAdapter(PhotoGridAdapter.OnClickListener { photo ->
+            viewModel.displayPhotoDetails(photo)
+        })
+
+        viewModel.navigateToSelectedPhoto.observe(viewLifecycleOwner, Observer { photo ->
+            if ( photo != null ) {
+                this.findNavController().navigate(GalleryFragmentDirections.actionShowDetail(photo))
+                viewModel.displayPhotoDetailsCompleted()
+            }
+        })
 
         return binding.root
     }
