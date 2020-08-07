@@ -1,4 +1,4 @@
-package com.fgsveto.a500pxphotospilot.network
+package com.fgsveto.a500pxphotospilot.gallery
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.fgsveto.a500pxphotospilot.databinding.GridViewItemBinding
+import com.fgsveto.a500pxphotospilot.network.Photo
 
 
 class PhotoGridAdapter(val onClickListener: OnClickListener) :

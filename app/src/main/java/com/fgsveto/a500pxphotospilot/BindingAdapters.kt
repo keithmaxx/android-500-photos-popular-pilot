@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.fgsveto.a500pxphotospilot.gallery.PhotosApiStatus
 import com.fgsveto.a500pxphotospilot.network.Photo
-import com.fgsveto.a500pxphotospilot.network.PhotoGridAdapter
+import com.fgsveto.a500pxphotospilot.gallery.PhotoGridAdapter
 
 /**
  * Change image visibility depending on API status

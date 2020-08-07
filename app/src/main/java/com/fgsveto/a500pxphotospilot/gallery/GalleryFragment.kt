@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fgsveto.a500pxphotospilot.R
 import com.fgsveto.a500pxphotospilot.databinding.FragmentGalleryBinding
-import com.fgsveto.a500pxphotospilot.network.PhotoGridAdapter
 import com.fgsveto.a500pxphotospilot.network.PhotosApiFeature
 
 /**
