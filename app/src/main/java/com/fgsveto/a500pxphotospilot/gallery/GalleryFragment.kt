@@ -2,6 +2,7 @@ package com.fgsveto.a500pxphotospilot.gallery
 
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -54,6 +55,18 @@ class GalleryFragment : Fragment() {
                 }
             }
         })
+
+        viewModel.status.observe(viewLifecycleOwner, Observer { status ->
+            if ( status == PhotosApiStatus.COMPLETED ) {
+                (activity as AppCompatActivity).supportActionBar?.title =
+                    getString(when (viewModel.currentFeature) {
+                        PhotosApiFeature.UPCOMING -> R.string.title_upcoming
+                        PhotosApiFeature.EDITORS_CHOICE -> R.string.title_editors_choice
+                        else -> R.string.title_popular
+                    })
+            }
+        })
+        (activity as AppCompatActivity).supportActionBar?.title = getString(R.string.title_popular)
 
         viewModel.navigateToSelectedPhoto.observe(viewLifecycleOwner, Observer { photo ->
             if ( photo != null ) {

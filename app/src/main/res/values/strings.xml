@@ -3,4 +3,7 @@
     <string name="show_popular">Show Popular</string>
     <string name="show_upcoming">Show Upcoming</string>
     <string name="show_editors_choice">Show Editors\' Choice</string>
+    <string name="title_popular">500px Popular Photos</string>
+    <string name="title_upcoming">500px Upcoming Photos</string>
+    <string name="title_editors_choice">500px Editors\' Choice Photos</string>
 </resources>

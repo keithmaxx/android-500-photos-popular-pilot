@@ -59,9 +59,9 @@ class GalleryViewModel: ViewModel() {
                         _photos.value = existingPhotos.toList()
                     }
                 }
-                _status.value = PhotosApiStatus.COMPLETED
                 currentPage = page
                 currentFeature = feature
+                _status.value = PhotosApiStatus.COMPLETED
             } catch (e: Exception) {
                 _status.value = PhotosApiStatus.ERROR
             }
