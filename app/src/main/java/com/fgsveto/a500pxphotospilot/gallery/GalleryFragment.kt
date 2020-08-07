@@ -80,7 +80,7 @@ class GalleryFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.overflow_menu, menu)
+        inflater.inflate(R.menu.gallery_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
