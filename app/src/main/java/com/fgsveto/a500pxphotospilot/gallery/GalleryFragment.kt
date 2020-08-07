@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.fgsveto.a500pxphotospilot.R
 import com.fgsveto.a500pxphotospilot.databinding.FragmentGalleryBinding
 import com.fgsveto.a500pxphotospilot.network.PhotosApiFeature
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 
 /**
  * This fragment is the landing screen for our 500px Photos API pilot app.
@@ -67,6 +69,8 @@ class GalleryFragment : Fragment() {
         })
         (activity as AppCompatActivity).supportActionBar?.title = getString(R.string.title_popular)
 
+        setupFilters(binding.categoryList)
+
         viewModel.navigateToSelectedPhoto.observe(viewLifecycleOwner, Observer { photo ->
             if ( photo != null ) {
                 this.findNavController().navigate(GalleryFragmentDirections.actionShowDetail(photo))
@@ -76,6 +80,25 @@ class GalleryFragment : Fragment() {
 
         setHasOptionsMenu(true)
         return binding.root
+    }
+
+    private fun setupFilters(chipGroup: ChipGroup) {
+        val inflator = LayoutInflater.from(chipGroup.context)
+
+        val children = viewModel.getFilters().map { category ->
+            val chip = inflator.inflate(R.layout.chip_category, chipGroup, false) as Chip
+            chip.text = category
+            chip.tag = category
+            chip.setOnCheckedChangeListener { button, isChecked ->
+                viewModel.onFilterChanged(button.tag as String, isChecked)
+            }
+            chip
+        }
+
+        chipGroup.removeAllViews()
+        for (chip in children) {
+            chipGroup.addView(chip)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

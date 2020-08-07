@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.fgsveto.a500pxphotospilot.network.Photo
 import com.fgsveto.a500pxphotospilot.network.PhotosApi
+import com.fgsveto.a500pxphotospilot.network.PhotosApiCategory
 import com.fgsveto.a500pxphotospilot.network.PhotosApiFeature
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -29,6 +30,9 @@ class GalleryViewModel: ViewModel() {
     val photos: LiveData<List<Photo>>
         get() = _photos
 
+    private var filter = FilterHolder()
+    private var unfilteredPhotos = _photos.value
+
     // For navigating to view the details of a selected photo
     private val _navigateToSelectedPhoto = MutableLiveData<Photo>()
     val navigateToSelectedPhoto: LiveData<Photo>
@@ -38,29 +42,35 @@ class GalleryViewModel: ViewModel() {
     var currentFeature = PhotosApiFeature.POPULAR
 
     init {
-        getPhotos(feature = currentFeature, page = currentPage)
+        getPhotos()
     }
 
-    private fun getPhotos(feature: PhotosApiFeature = PhotosApiFeature.POPULAR, page: Int = 1) {
+    private fun getPhotos(filterOnly: Boolean = false) {
         coroutineScope.launch {
-            // Get the Retrofit request Deferred object...
-            var getPropertiesDeferred = PhotosApi.retrofitService.getPhotos(feature = feature.value, page = page)
             try {
-                _status.value = PhotosApiStatus.LOADING
-                // ... for which we would Await the result.
-                var photosApiResponse = getPropertiesDeferred.await()
-
-                if (photosApiResponse.photos.isNotEmpty()) {
-                    if (feature != currentFeature || _photos.value.isNullOrEmpty()) {
-                        _photos.value = photosApiResponse.photos
-                    } else {
-                        val existingPhotos = _photos.value!!.toMutableList()
-                        existingPhotos.addAll(photosApiResponse.photos)
-                        _photos.value = existingPhotos.toList()
+                if (!filterOnly) {
+                    // Get the Retrofit request Deferred object...
+                    var getPropertiesDeferred = PhotosApi.retrofitService.getPhotos(
+                        feature = currentFeature.value, page = currentPage
+                    )
+                    _status.value = PhotosApiStatus.LOADING
+                    // ... for which we would Await the result.
+                    val photosApiResponse = getPropertiesDeferred.await()
+                    if (photosApiResponse.photos.isNotEmpty()) {
+                        unfilteredPhotos = if (currentPage > 1) {
+                            val existingPhotos = unfilteredPhotos?.toMutableList()
+                            existingPhotos?.addAll(photosApiResponse.photos)
+                            existingPhotos
+                        } else {
+                            photosApiResponse.photos
+                        }
                     }
                 }
-                currentPage = page
-                currentFeature = feature
+                _photos.value = if (filter.currentValue == null) {
+                    unfilteredPhotos
+                } else {
+                    unfilteredPhotos!!.filter { photo -> photo.category == filter.currentValue!!.id }
+                }
                 _status.value = PhotosApiStatus.COMPLETED
             } catch (e: Exception) {
                 _status.value = PhotosApiStatus.ERROR
@@ -69,7 +79,8 @@ class GalleryViewModel: ViewModel() {
     }
 
     fun getNextPage() {
-        getPhotos(page = ++currentPage)
+        currentPage++
+        getPhotos()
     }
 
     fun isLoading(): Boolean {
@@ -77,8 +88,20 @@ class GalleryViewModel: ViewModel() {
     }
 
     fun showFeature(feature: PhotosApiFeature) {
-        if (feature != currentFeature)
-            getPhotos(feature = feature)
+        if (feature != currentFeature) {
+            currentFeature = feature
+            getPhotos()
+        }
+    }
+
+    fun getFilters(): List<String> {
+        return PhotosApiCategory.values().filter { it != PhotosApiCategory.ALL }.map { it.value }
+    }
+
+    fun onFilterChanged(filter: String, isChecked: Boolean) {
+        if (this.filter.update(filter, isChecked)) {
+            getPhotos(filterOnly = true)
+        }
     }
 
     override fun onCleared() {
@@ -92,6 +115,23 @@ class GalleryViewModel: ViewModel() {
 
     fun displayPhotoDetailsCompleted() {
         _navigateToSelectedPhoto.value = null
+    }
+
+    private class FilterHolder {
+        var currentValue: PhotosApiCategory? = null
+            private set
+
+        fun update(changedFilter: String, isChecked: Boolean): Boolean {
+            var category = PhotosApiCategory.values().associateBy(PhotosApiCategory::value)[changedFilter]
+            if (isChecked) {
+                currentValue = category
+                return true
+            } else if (currentValue == category) {
+                currentValue = null
+                return true
+            }
+            return false
+        }
     }
 }
 
