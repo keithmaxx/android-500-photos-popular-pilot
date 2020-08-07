@@ -40,6 +40,7 @@ data class Photo(
     @Json(name = "votes_count") val votesCount: Long,
     @Json(name = "times_viewed") val timesViewed: Long,
     val feature: String? = "",
+    val user: User,
     @Json(name = "feature_date") val featureDate: String): Parcelable
 
 
@@ -49,3 +50,10 @@ data class Image(
     val size: Int,
     val url: String,
     @Json(name = "https_url") val httpsUrl: String) : Parcelable
+
+
+@Parcelize
+data class User(
+    val id: String,
+    val username: String,
+    val fullname: String) : Parcelable

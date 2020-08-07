@@ -3,6 +3,7 @@ package com.fgsveto.a500pxphotospilot.detail
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.fgsveto.a500pxphotospilot.R
 import com.fgsveto.a500pxphotospilot.databinding.FragmentDetailBinding
@@ -29,6 +30,15 @@ class DetailFragment : Fragment() {
         viewModel = ViewModelProvider(this, viewModelFactory).get(DetailViewModel::class.java)
 
         binding.viewModel = viewModel
+
+        viewModel.selectedPhoto.observe(viewLifecycleOwner, Observer { photo ->
+            binding.photoUserText.text = getString(R.string.text_photo_by, photo.user.username)
+            binding.photoRatingText.text = getString(R.string.text_rating, photo.rating)
+            binding.photoStatsText.text = getString(R.string.text_stats,
+                photo.commentsCount,
+                photo.votesCount,
+                photo.timesViewed)
+        })
 
         setHasOptionsMenu(true)
         return binding.root
