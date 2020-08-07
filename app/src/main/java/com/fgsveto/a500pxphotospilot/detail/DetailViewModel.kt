@@ -21,7 +21,7 @@ class DetailViewModel(photo: Photo, app: Application) : AndroidViewModel(app) {
 
     init {
         _selectedPhoto.value = photo
-        _detailsVisibility.value = true
+        _detailsVisibility.value = false
     }
 
     val photoUrl = Transformations.map(selectedPhoto) { photo -> photo.images[0].httpsUrl }

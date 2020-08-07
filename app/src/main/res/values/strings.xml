@@ -7,6 +7,7 @@
     <string name="title_popular">500px Popular Photos</string>
     <string name="title_upcoming">500px Upcoming Photos</string>
     <string name="title_editors_choice">500px Editors\' Choice Photos</string>
+    <string name="hint_photo_details">Tap this icon to show or hide photo details.</string>
     <string name="text_photo_by">by %s</string>
     <string name="text_rating">Rating %.1f</string>
     <string name="text_stats">Comments: %d\nVotes: %d\nViews: %d</string>

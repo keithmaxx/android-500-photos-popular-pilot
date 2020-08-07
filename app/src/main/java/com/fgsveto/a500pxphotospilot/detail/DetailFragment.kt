@@ -2,9 +2,11 @@ package com.fgsveto.a500pxphotospilot.detail
 
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.fgsveto.a500pxphotospilot.Prefs
 import com.fgsveto.a500pxphotospilot.R
 import com.fgsveto.a500pxphotospilot.databinding.FragmentDetailBinding
 import com.fgsveto.a500pxphotospilot.network.Photo
@@ -39,6 +41,14 @@ class DetailFragment : Fragment() {
                 photo.votesCount,
                 photo.timesViewed)
         })
+
+        val prefs = Prefs(requireContext())
+        if (!prefs.isHintShown) {
+            val toast = Toast.makeText(requireContext(), R.string.hint_photo_details, Toast.LENGTH_LONG)
+            toast.setGravity(Gravity.TOP, 150, 250)
+            toast.show()
+            prefs.isHintShown = true
+        }
 
         setHasOptionsMenu(true)
         return binding.root
