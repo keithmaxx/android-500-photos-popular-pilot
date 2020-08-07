@@ -6,11 +6,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.fgsveto.a500pxphotospilot.R
 import com.fgsveto.a500pxphotospilot.databinding.FragmentDetailBinding
+import com.fgsveto.a500pxphotospilot.network.Photo
 
 /**
  * This fragment shows the detailed information about a 500px [Photo].
  */
 class DetailFragment : Fragment() {
+
+    private lateinit var viewModel: DetailViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -23,7 +26,9 @@ class DetailFragment : Fragment() {
 
         val photo = DetailFragmentArgs.fromBundle(arguments!!).selectedPhoto
         val viewModelFactory = DetailViewModelFactory(photo, application)
-        binding.viewModel = ViewModelProvider(this, viewModelFactory).get(DetailViewModel::class.java)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(DetailViewModel::class.java)
+
+        binding.viewModel = viewModel
 
         setHasOptionsMenu(true)
         return binding.root
@@ -36,7 +41,7 @@ class DetailFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_details) {
-            // TODO toggle showing/hiding details
+            viewModel.toggleVisibility()
         }
         return true
     }
