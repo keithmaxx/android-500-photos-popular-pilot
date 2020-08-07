@@ -28,6 +28,7 @@ data class Photo(
     val images: List<Image>,
     val name: String? = "",
     val description: String? = "",
+    val category: Int,
     @Json(name = "taken_at") val takenAt: String? = "",
     @Json(name = "shutter_speed") val shutterSpeed: String? = "",
     @Json(name = "focal_length") val focalLength: String? = "",

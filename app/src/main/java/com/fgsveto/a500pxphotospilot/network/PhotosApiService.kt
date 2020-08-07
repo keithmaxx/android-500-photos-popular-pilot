@@ -13,7 +13,23 @@ import retrofit2.http.Query
 
 private const val BASE_URL = "https://api.500px.com/"
 private const val CONSUMER_KEY = "<insert_your_consumer_key>"
-enum class PhotosApiFeature(val value: String) { POPULAR("popular"), UPCOMING("upcoming"), EDITORS_CHOICE("editors") }
+
+enum class PhotosApiFeature(val value: String) {
+    POPULAR("popular"),
+    UPCOMING("upcoming"),
+    EDITORS_CHOICE("editors")
+}
+enum class PhotosApiCategory(val id: Int, val value: String) {
+    ALL(-1, "All"),
+    UNCATEGORIZED(0, "Uncategorized"),
+    PEOPLE(7, "People"),
+    LANDSCAPES(8, "Landscapes"),
+    CITY_ARCHITECTURE(9, "City and Architecture"),
+    ANIMALS(11, "Animals"),
+    FASHION(14, "Fashion"),
+    NATURE(18, "Nature"),
+    FOOD(23, "Food")
+}
 
 private val moshi = Moshi.Builder()
     .add(KotlinJsonAdapterFactory())
