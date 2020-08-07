@@ -73,7 +73,7 @@ class GalleryViewModel: ViewModel() {
     }
 
     fun isLoading(): Boolean {
-        return _status == PhotosApiStatus.LOADING
+        return _status.value == PhotosApiStatus.LOADING
     }
 
     fun showFeature(feature: PhotosApiFeature) {
