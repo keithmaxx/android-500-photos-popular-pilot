@@ -29,6 +29,9 @@ class GalleryViewModel: ViewModel() {
     private val _photos = MutableLiveData<List<Photo>>()
     val photos: LiveData<List<Photo>>
         get() = _photos
+    private val _categories = MutableLiveData<List<String>>()
+    val categories: LiveData<List<String>>
+        get() = _categories
 
     private var filter = FilterHolder()
     private var unfilteredPhotos = _photos.value
@@ -65,6 +68,12 @@ class GalleryViewModel: ViewModel() {
                             photosApiResponse.photos
                         }
                     }
+
+                    // Get all PhotosApiCategory (in String) that are present in currently available photos
+                    _categories.value = PhotosApiCategory.values()
+                        .filter { m ->
+                            unfilteredPhotos!!.map { it.category }.any { it == m.id }
+                        }.map { it.value }
                 }
                 _photos.value = if (filter.currentValue == null) {
                     unfilteredPhotos
@@ -92,10 +101,6 @@ class GalleryViewModel: ViewModel() {
             currentFeature = feature
             getPhotos()
         }
-    }
-
-    fun getFilters(): List<String> {
-        return PhotosApiCategory.values().filter { it != PhotosApiCategory.ALL }.map { it.value }
     }
 
     fun onFilterChanged(filter: String, isChecked: Boolean) {

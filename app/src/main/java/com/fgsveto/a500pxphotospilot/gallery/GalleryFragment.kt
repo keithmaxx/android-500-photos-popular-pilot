@@ -69,7 +69,28 @@ class GalleryFragment : Fragment() {
         })
         (activity as AppCompatActivity).supportActionBar?.title = getString(R.string.title_popular)
 
-        setupFilters(binding.categoryList)
+        viewModel.categories.observe(viewLifecycleOwner, object: Observer<List<String>> {
+            override fun onChanged(data: List<String>?) {
+                data ?: return
+                val chipGroup = binding.categoryList
+                val inflator = LayoutInflater.from(chipGroup.context)
+
+                val children = data.map { categoryName ->
+                    val chip = inflator.inflate(R.layout.chip_category, chipGroup, false) as Chip
+                    chip.text = categoryName
+                    chip.tag = categoryName
+                    chip.setOnCheckedChangeListener { button, isChecked ->
+                        viewModel.onFilterChanged(button.tag as String, isChecked)
+                    }
+                    chip
+                }
+
+                chipGroup.removeAllViews()
+                for (chip in children) {
+                    chipGroup.addView(chip)
+                }
+            }
+        })
 
         viewModel.navigateToSelectedPhoto.observe(viewLifecycleOwner, Observer { photo ->
             if ( photo != null ) {
@@ -80,25 +101,6 @@ class GalleryFragment : Fragment() {
 
         setHasOptionsMenu(true)
         return binding.root
-    }
-
-    private fun setupFilters(chipGroup: ChipGroup) {
-        val inflator = LayoutInflater.from(chipGroup.context)
-
-        val children = viewModel.getFilters().map { category ->
-            val chip = inflator.inflate(R.layout.chip_category, chipGroup, false) as Chip
-            chip.text = category
-            chip.tag = category
-            chip.setOnCheckedChangeListener { button, isChecked ->
-                viewModel.onFilterChanged(button.tag as String, isChecked)
-            }
-            chip
-        }
-
-        chipGroup.removeAllViews()
-        for (chip in children) {
-            chipGroup.addView(chip)
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

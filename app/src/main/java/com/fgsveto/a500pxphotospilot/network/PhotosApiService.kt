@@ -4,7 +4,6 @@ import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterF
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.Deferred
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
@@ -20,16 +19,38 @@ enum class PhotosApiFeature(val value: String) {
     EDITORS_CHOICE("editors")
 }
 enum class PhotosApiCategory(val id: Int, val value: String) {
-    ALL(-1, "All"),
     UNCATEGORIZED(0, "Uncategorized"),
+    CELEBRITIES(1, "Celebrities"),
+    FILM(2, "Film"),
+    JOURNALISM(3, "Journalism"),
+    NUDE(4, "Nude"),
+    BLACK_AND_WHITE(5, "Black and White"),
+    STILL_LIFE(6, "Still Life"),
     PEOPLE(7, "People"),
     LANDSCAPES(8, "Landscapes"),
     CITY_ARCHITECTURE(9, "City and Architecture"),
+    ABSTRACT(10, "Abstract"),
     ANIMALS(11, "Animals"),
+    MACRO(12, "Macro"),
+    TRAVEL(13, "Travel"),
     FASHION(14, "Fashion"),
+    COMMERCIAL(15, "Commercial"),
+    CONCERT(16, "Concert"),
+    SPORT(17, "Sport"),
     NATURE(18, "Nature"),
-    FOOD(23, "Food")
+    PERFORMING_ARTS(19, "Performing Arts"),
+    FAMILY(20, "Family"),
+    STREET(21, "Street"),
+    UNDERWATER(22, "Underwater"),
+    FOOD(23, "Food"),
+    FINE_ART(24, "Fine Art"),
+    WEDDING(25, "Wedding"),
+    TRANSPORTATION(26, "Transportation"),
+    URBAN_EXPLORATION(27, "Urban Exploration"),
+    AERIAL(29, "Aerial"),
+    NIGHT(30, "Night")
 }
+
 
 private val moshi = Moshi.Builder()
     .add(KotlinJsonAdapterFactory())
