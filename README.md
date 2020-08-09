@@ -1,6 +1,6 @@
 # 500px Photos Pilot
 
-This is a pilot Android application that uses the [500px](500px.com) Photos API.
+This is a pilot Android application that uses the [500px](https://500px.com) Photos API.
 
 ### Design
 This photos app is designed and built using the MVVM architecture, with
