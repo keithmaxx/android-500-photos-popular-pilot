@@ -2,6 +2,9 @@
 
 This is a pilot Android application that uses the [500px](https://500px.com) Photos API.
 
+<img src="app/src/main/res/mipmap-xxhdpi/Gallery.png" width="200">
+<img src="app/src/main/res/mipmap-xxhdpi/Detail.png" width="200">
+
 ### Design
 This photos app is designed and built using the MVVM architecture, with
 the following components:
